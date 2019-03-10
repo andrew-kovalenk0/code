@@ -1,51 +1,75 @@
+#include "pch.h"
 #include <iostream>
 
 using namespace std;
 
-struct stack {
-    int inf;
-    stack *next;
+struct spisok {
+	int inf;
+	spisok *right;
+	spisok *left;
 };
 
-void ad(stack **top, int value) {
-    stack *q = new stack();
-    q->inf = value;
-    if (top == NULL) {
-        *top = q;
-    }
-    else {
-        q->next = *top;
-        *top = q;
-    }
+void AddFirst(spisok **p, int value)
+{
+	spisok *temp = new spisok;
+    temp->right = NULL;
+    temp->left = NULL;
+	temp->inf = value;
+	*p = temp;
 }
 
-int read(stack *top) {
-    stack *q = top;
-    return q->inf;
+void add(spisok **prev, int value) {
+	spisok *prevn = new spisok;
+	prevn->inf = value;
+	prevn->left = *prev;
+	prevn->right = NULL;
+	(*prev)->right = prevn;
+	*prev = (prevn);
+}
+
+void del(spisok **sp) {
+	spisok *temp = *sp;
+	(*sp)->left->right = (*sp)->right;
+	(*sp)->right->left = (*sp)->left;
+	//cout << (*sp)->right->inf << endl;
+	//cout << (*sp)->left->inf << endl;
+	delete temp;
+}
+
+void press(spisok *sp) {
+	spisok *q;
+	q = sp;
+	while (q != NULL) {
+		cout << q->inf << endl;
+		q = q->left;
+	}
 }
 
 int main() {
-    int i = 1, value = 0, qt = 0, max = 0, min = 0;
-    stack *top = NULL;
-    while (i == 1) {
-        cout << "To add one more element press 1, or press 0:" << endl;
-        cin >> i;
-        if (i == 0) break;
-        cout << "Enter value: ";
-        cin >> value;
-        ad(&top, value);
-        qt++;
-    }
-    stack *q = top;
-    max = read(q);
-    min = read(q);
-    for (int j = 0; j < qt; j++) {
-        if (read(q) > max)
-            max = read(q);
-        if (read(q))
-            min = read(q);
-        q = q->next;
-    }
-    cout << "Minimal value: " << min << endl;
-    cout << "Maximal value: " << max << endl;
+	int i = 1, value = 0, qt = 0;
+	spisok *beg = NULL;
+	while (i == 1) {
+		cout << "To add one more element press 1, or press 0:" << endl;
+		cin >> i;
+		if (i == 0) break;
+		cout << "Enter value: ";
+		cin >> value;
+		if (qt == 0)
+			AddFirst(&beg, value);
+		else
+			add(&beg, value);
+		qt++;
+	}
+	cout << endl;
+	spisok *b = beg;
+	//cout << b->inf << endl;
+	for (int i = 0; i < qt; i++)
+	{
+		if (beg->inf < 0)
+			del(&beg);
+		beg = beg->left;
+		//cout << beg->inf << endl;
+	}
+	//cout << b->inf << endl;
+	press(b);
 }
