@@ -5,71 +5,104 @@ using namespace std;
 
 struct spisok {
 	int inf;
-	spisok *right;
-	spisok *left;
+	spisok *next;
+	spisok *prev;
 };
 
-void AddFirst(spisok **p, int value)
+void AddFirst(spisok **p, int a)
 {
-	spisok *temp = new spisok;
-    temp->right = NULL;
-    temp->left = NULL;
-	temp->inf = value;
-	*p = temp;
+	*p = new spisok;
+	(*p)->next = NULL;
+	(*p)->prev = NULL;
+	(*p)->inf = a;
 }
 
-void add(spisok **prev, int value) {
-	spisok *prevn = new spisok;
-	prevn->inf = value;
-	prevn->left = *prev;
-	prevn->right = NULL;
-	(*prev)->right = prevn;
-	*prev = (prevn);
+void adde(spisok **last, int a) {
+	spisok *last_new = new spisok;
+	last_new->inf = a;
+	last_new->prev = *last;
+	last_new->next = NULL;
+	(*last)->next = last_new;
+	*last = last_new;
 }
 
-void del(spisok **sp) {
-	spisok *temp = *sp;
-	(*sp)->left->right = (*sp)->right;
-	(*sp)->right->left = (*sp)->left;
-	//cout << (*sp)->right->inf << endl;
-	//cout << (*sp)->left->inf << endl;
-	delete temp;
+void addb(spisok **last, int a) {
+	spisok *last_new = new spisok;
+	last_new->inf = a;
+	last_new->next = *last;
+	last_new->prev = NULL;
+	(*last)->prev = last_new;
+	*last = last_new;
+}
+
+void del(spisok **sp, spisok **beg) {
+	if ((*sp)->next == NULL) {
+		//cout << "del: " << (*sp)->inf << endl;
+		(*sp)->prev->next = NULL;
+	}
+
+	else if ((*sp)->prev == NULL) {
+
+		(*sp)->next->prev = NULL;
+		*beg = (*sp)->next;
+
+	}
+	else
+		(*sp)->prev->next = (*sp)->next;
 }
 
 void press(spisok *sp) {
-	spisok *q;
-	q = sp;
-	while (q != NULL) {
-		cout << q->inf << endl;
-		q = q->left;
+	while (sp != NULL) {
+		cout << sp->inf << endl;
+		sp = sp->next;
 	}
 }
 
-int main() {
-	int i = 1, value = 0, qt = 0;
-	spisok *beg = NULL;
-	while (i == 1) {
-		cout << "To add one more element press 1, or press 0:" << endl;
+int main()
+{
+	int a, qn = 0, i =1;
+	spisok *last = NULL;
+	spisok *start = NULL;
+	spisok *iter = NULL;
+	last = start;
+	while (i == 1 || i == 2) {
+		cout << "To put element to end press 1, to begin press 2, to exit press 0." << endl;
 		cin >> i;
-		if (i == 0) break;
-		cout << "Enter value: ";
-		cin >> value;
-		if (qt == 0)
-			AddFirst(&beg, value);
-		else
-			add(&beg, value);
-		qt++;
+		if (i == 0)
+			break;
+		if (i == 1) {
+			cout << "Press element: ";
+			cin >> a;
+			if (qn == 0) {
+				AddFirst(&start, a);
+				last = start;
+			}
+			else
+				adde(&last, a);
+		}
+		if (i == 2) {
+			cout << "Press element: ";
+			cin >> a;
+			if (qn == 0) {
+				AddFirst(&start, a);
+				last = start;
+			}
+			else
+				addb(&start, a);
+		}
+		qn++;
 	}
 	cout << endl;
-	spisok *b = beg;
-	//cout << b->inf << endl;
-	for (int i = 0; i < qt; i++)
-	{
-		if (beg->inf < 0)
-			del(&beg);
-		beg = beg->left;
-		//cout << beg->inf << endl;
+	press(start);
+	cout << endl;
+	iter = last;
+	while(iter!=NULL) {
+			if (iter->inf < 0) {
+				
+				del(&iter, &start);
+			}
+		iter = iter->prev;
 	}
-	//cout << b->inf << endl;
-	press(b);
+
+	press(start);
 }
