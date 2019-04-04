@@ -10,7 +10,7 @@ int main()
 
 	cout << "Press number of variables: ";
 	cin >> a;
-	a = b;
+	b = a;
 	cout << endl;
 
 	m = new double*[a];
