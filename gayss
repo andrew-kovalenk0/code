@@ -8,10 +8,9 @@ int main()
 	double **m, *o, *an, c = 0, temp = 0;
 	int  a = 0, b = 0;
 
-	cout << "Press number of lines: ";
+	cout << "Press number of variables: ";
 	cin >> a;
-	cout << "Press number of coloumns: ";
-	cin >> b;
+	a = b;
 	cout << endl;
 
 	if (b != a) {
