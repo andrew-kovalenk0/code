@@ -34,10 +34,11 @@ int main()
 		dif[i] = yj[i] - fi[i];
 		l = 1;
 	}
+
 	for (int i = 0; i < n; i++){
-		cout << "X" << i+1 << "=" << xj[i] << endl;
-		cout << "Function(X" << i + 1 << ")= " << yj[i] << endl;
-		cout << "Approximated function(X" << i + 1 << ")= " << fi[i] << endl;
-		cout << "Difference(X" << i + 1 << ")= " << dif[i] << endl << endl;
+		cout << xj[i] << "            ";
+		cout << yj[i] << "            ";
+		cout << fi[i] << "            ";
+		cout<< dif[i] << endl;
 	}
 }
