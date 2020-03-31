@@ -34,6 +34,7 @@ void init_all()
 	RCC->APB1ENR |= RCC_APB1ENR_USART2EN | RCC_APB1ENR_USART3EN | RCC_APB1ENR_DACEN | RCC_APB1ENR_TIM2EN | RCC_APB1ENR_TIM4EN | RCC_APB1ENR_I2C2EN;
 	RCC->APB2ENR |= RCC_APB2ENR_USART1EN | RCC_APB2ENR_SYSCFGEN | RCC_APB2ENR_ADC1EN;
 
+	GPIOA->MODER |= GPIO_MODER_MODER2_0;
 	GPIOB->MODER |= GPIO_MODER_MODER12_0 | GPIO_MODER_MODER13_0 | GPIO_MODER_MODER14_0 | GPIO_MODER_MODER15_0;
 	GPIOD->MODER |= GPIO_MODER_MODER10_0 | GPIO_MODER_MODER13_0;
 
@@ -1948,10 +1949,10 @@ int main(void)
 	if(command_buffer[0] == 0x04 && command_buffer[1] == 0xf0)
 	{
 		connection_check();
-		clear_command_buffer();
 	}
-	read_command(2);
-	if(command_buffer[1] == 0x04 && command_buffer[2] == 0xe0)
+	clear_command_buffer();
+ 	read_command(2);
+	if(command_buffer[0] == 0x04 && command_buffer[1] == 0xe0)
 	{
 		while ((USART3->SR & USART_SR_TXE) == 0);
 		USART3->DR = 0x05;
